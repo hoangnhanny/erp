@@ -1,24 +1,24 @@
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-} from 'typeorm';
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from "typeorm";
 
-@Entity('suppliers')
+@Entity("suppliers")
 export class Supplier {
-    @PrimaryGeneratedColumn('uuid')
-    id!: string;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
-    @Column({ type: 'text' })
-    name!: string;
+  @Column({ type: "text" })
+  name!: string;
 
-    @Column({ type: 'text', nullable: true })
-    email!: string | null;
+  @Column({ type: "text", nullable: true })
+  email!: string | null;
 
-    @Column({ type: 'numeric', precision: 18, scale: 2, nullable: true })
-    credit_limit!: number | null;
+  @Column({ type: "numeric", precision: 18, scale: 2, nullable: true })
+  credit_limit!: number | null;
 
-    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
-    created_at!: Date;
+  @CreateDateColumn({ type: "timestamp", name: "created_at" })
+  created_at!: Date;
 }

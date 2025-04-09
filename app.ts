@@ -14,16 +14,13 @@ app.use("/api-docs", (req, res, next) => next());
 
 app.use(authMiddleware); // Apply auth middleware to all routes
 
-
-
-app.use(router)
-// app.use("/api/auth", authRouter); 
+app.use(router);
+// app.use("/api/auth", authRouter);
 
 app.get("/", (req, res) => {
-    res.send("API is running 🚀");
+  res.send("API is running 🚀");
 });
 
 setupSwagger(app);
-
 
 export default app;
