@@ -21,7 +21,7 @@ export class User {
   email!: string;
 
   @Column("text", { name: "password_hash" })
-  passwordHash!: string;
+  password!: string;
 
   @Column("text")
   role!: UserRole;

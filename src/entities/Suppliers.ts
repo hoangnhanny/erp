@@ -17,8 +17,8 @@ export class Supplier {
   email!: string | null;
 
   @Column({ type: "numeric", precision: 18, scale: 2, nullable: true })
-  credit_limit!: number | null;
+  creditLimit!: number | null;
 
   @CreateDateColumn({ type: "timestamp", name: "created_at" })
-  created_at!: Date;
+  createdAt!: Date;
 }

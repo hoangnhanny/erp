@@ -2,14 +2,17 @@ import { Repository } from "typeorm";
 import { User } from "../../entities/User";
 import bcrypt from "bcryptjs";
 import { AppDataSource } from "../../config/data-source";
+import { RegisterResponse } from "../auth/auth.dto";
 
 const userRepository: Repository<User> = AppDataSource.getRepository(User);
 
-const createUser = async (userData: Partial<User>): Promise<User> => {
+const createUser = async (
+  userData: Partial<User>
+): Promise<RegisterResponse> => {
   // Check if the user already exists
-  const { name, email, passwordHash, role } = userData;
+  const { name, email, password, role } = userData;
 
-  if (!name || !email || !passwordHash || !role) {
+  if (!name || !email || !password || !role) {
     throw new Error("Missing required fields");
   }
 
@@ -20,15 +23,22 @@ const createUser = async (userData: Partial<User>): Promise<User> => {
     throw new Error("User already exists");
   }
 
-  const hash = await bcrypt.hash(passwordHash, 10);
+  const hash = await bcrypt.hash(password, 10);
 
   const user = userRepository.create({
     name,
     email,
-    passwordHash: hash,
-    role,
+    password: hash,
+    role: role,
   });
-  return await userRepository.save(user);
+  const result = await userRepository.save(user);
+
+  return {
+    id: result.id,
+    name: result.name,
+    email: result.email,
+    role: result.role,
+  };
 };
 
 const verifyPassword = async (

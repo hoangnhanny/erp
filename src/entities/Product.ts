@@ -19,15 +19,24 @@ export class Product {
   @Column({ type: "text", nullable: true })
   category!: string | null;
 
-  @Column({ type: "numeric", precision: 12, scale: 2, nullable: true })
-  unit_price!: number | null;
+  @Column({
+    name: "unit_price",
+    type: "numeric",
+    precision: 12,
+    scale: 2,
+    nullable: true,
+  })
+  unitPrice!: number | null;
 
   @Column({ type: "integer", default: 0 })
   stock!: number;
 
-  @Column({ type: "integer", default: 0 })
-  pending_stock!: number;
+  @Column({ name: "pending_stock", type: "integer", default: 0 })
+  pendingStock!: number;
 
-  @CreateDateColumn({ type: "timestamp", name: "created_at" })
-  created_at!: Date;
+  @CreateDateColumn({
+    name: "created_at",
+    type: "timestamp",
+  })
+  createdAt!: Date;
 }

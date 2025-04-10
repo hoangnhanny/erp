@@ -12,7 +12,7 @@ const options: swaggerJsdoc.Options = {
     },
     components: {
       securitySchemes: {
-        bearerAuth: {
+        BearerAuth: {
           type: "http",
           scheme: "bearer",
           bearerFormat: "JWT",
@@ -26,7 +26,7 @@ const options: swaggerJsdoc.Options = {
     ],
     servers: [{ url: "http://localhost:3003" }],
   },
-  apis: ["./src/module/**/*.ts"],
+  apis: ["./src/module/**/*.swagger.ts"],
 };
 
 const specs = swaggerJsdoc(options);

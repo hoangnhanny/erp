@@ -1,7 +1,6 @@
 /**
  * @swagger
- * path:
- *  /login:
+ *  /auth/login:
  *    post:
  *      summary: Login user
  *      description: Authenticate user with email and password and return a JWT token
@@ -15,10 +14,10 @@
  *              properties:
  *                email:
  *                  type: string
- *                  example: "user@example.com"
+ *                  example: "admin"
  *                password:
  *                  type: string
- *                  example: "password123"
+ *                  example: "admin"
  *      responses:
  *        200:
  *          description: Successful login, returns user object with token
@@ -41,4 +40,46 @@
  *          description: Unauthorized
  *        500:
  *          description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ *  /auth/registerUser:
+ *    post:
+ *     summary: Create a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - name
+ *               - password
+ *               - role
+ *             properties:
+ *               email:
+ *                type: string
+ *                example: 'procurement'
+ *               name:
+ *                 type: string
+ *                 example: admin
+ *               password:
+ *                 type: string
+ *                 example: admin
+ *               role:
+ *                type: string
+ *                enum:
+ *                 - procurement
+ *                 - manager
+ *                 - inventory
+ *                 - finance
+ *                example: 'procurement'
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *       500:
+ *         description: Internal server error
  */
