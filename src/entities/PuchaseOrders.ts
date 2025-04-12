@@ -7,9 +7,11 @@ import {
   ManyToOne,
   JoinColumn,
   Check,
+  OneToMany,
 } from "typeorm";
 import { Supplier } from "./Suppliers";
 import { User } from "./User";
+import { PurchaseOrderItem } from "./PurchaseOrderItems";
 
 @Entity("purchase_orders")
 export class PurchaseOrder {
@@ -20,15 +22,15 @@ export class PurchaseOrder {
   @JoinColumn({ name: "supplier_id" })
   supplier!: Supplier;
 
-  @Column({ type: "uuid" })
-  supplier_id!: string;
+  @Column({ name: "supplier_id", type: "uuid" })
+  supplierId!: string;
 
   @ManyToOne(() => User, { nullable: false, onDelete: "CASCADE" })
   @JoinColumn({ name: "created_by" })
   createdBy!: User;
 
-  @Column({ type: "uuid" })
-  created_by!: string;
+  @Column({ name: "created_by", type: "uuid" })
+  createdById!: string;
 
   @Column({ type: "text" })
   @Check(
@@ -36,12 +38,21 @@ export class PurchaseOrder {
   )
   status!: "draft" | "pending_review" | "approved" | "rejected" | "cancelled";
 
-  @Column({ type: "numeric", precision: 18, scale: 2, default: 0 })
-  total_amount!: number;
+  @Column({
+    name: "total_amount",
+    type: "numeric",
+    precision: 18,
+    scale: 2,
+    default: 0,
+  })
+  totalAmount!: number;
 
   @CreateDateColumn({ type: "timestamp", name: "created_at" })
-  created_at!: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ type: "timestamp", name: "updated_at" })
-  updated_at!: Date;
+  updatedAt!: Date;
+
+  @OneToMany(() => PurchaseOrderItem, (item) => item.purchaseOrder)
+  items!: PurchaseOrderItem[];
 }

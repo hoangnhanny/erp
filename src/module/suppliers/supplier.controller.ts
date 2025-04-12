@@ -1,6 +1,6 @@
 import { Supplier } from "../../entities/Suppliers";
-import { ResponseData } from "../../model/response.type";
-import { CreateSupplierResponse } from "./supplier.model";
+import { ResponseData } from "../../type/response.type";
+import { CreateSupplierResponse } from "./supplier.dto";
 import SupplierService from "./supplier.service";
 import { Request } from "express";
 

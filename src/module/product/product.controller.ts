@@ -1,6 +1,6 @@
 import { Product } from "../../entities/Product";
-import { ResponseData } from "../../model/response.type";
-import { CreateProductResponse, UpdateProductResponse } from "./product.model";
+import { ResponseData } from "../../type/response.type";
+import { CreateProductResponse, UpdateProductResponse } from "./product.dto";
 import ProductService from "./product.service";
 import { Request } from "express";
 

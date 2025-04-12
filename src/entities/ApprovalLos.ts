@@ -14,19 +14,19 @@ export class ApprovalLog {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: "uuid" })
-  purchase_order_id!: string;
+  @Column({ name: "purchase_order_id", type: "uuid" })
+  purchaseOrderId!: string;
 
   @ManyToOne(() => PurchaseOrder, { nullable: false, onDelete: "CASCADE" })
   @JoinColumn({ name: "purchase_order_id" })
   purchaseOrder!: PurchaseOrder;
 
   @Column({ type: "uuid" })
-  approved_by!: string;
+  approvedBy!: string;
 
   @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: "approved_by" })
-  approvedBy!: User;
+  approvedById!: User;
 
   @Column({
     type: "varchar",
@@ -38,5 +38,5 @@ export class ApprovalLog {
   comment!: string | null;
 
   @CreateDateColumn({ name: "created_at" })
-  created_at!: Date;
+  createdAt!: Date;
 }

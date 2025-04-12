@@ -15,8 +15,8 @@ export class InventoryTransaction {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: "uuid" })
-  product_id!: string;
+  @Column({ name: "product_id", type: "uuid" })
+  productId!: string;
 
   @ManyToOne(() => Product, { nullable: false })
   @JoinColumn({ name: "product_id" })
@@ -31,15 +31,15 @@ export class InventoryTransaction {
   @Column({ type: "integer" })
   quantity!: number;
 
-  @Column({ type: "uuid", nullable: true })
-  related_po_id!: string | null;
+  @Column({ name: "related_po_id", type: "uuid", nullable: true })
+  relatedPoId!: string | null;
 
   @ManyToOne(() => PurchaseOrder, { nullable: true, onDelete: "SET NULL" })
   @JoinColumn({ name: "related_po_id" })
   relatedPurchaseOrder!: PurchaseOrder | null;
 
-  @Column({ type: "uuid" })
-  performed_by!: string;
+  @Column({ name: "performed_by", type: "uuid" })
+  performedById!: string;
 
   @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: "performed_by" })
@@ -49,5 +49,5 @@ export class InventoryTransaction {
   note!: string | null;
 
   @CreateDateColumn({ name: "created_at" })
-  created_at!: Date;
+  createdAt!: Date;
 }

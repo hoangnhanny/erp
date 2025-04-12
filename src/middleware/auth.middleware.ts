@@ -14,6 +14,9 @@ function getRouteKey(req: Request): string {
 function isAuthorizedRole(key: string, role: string): boolean {
   const allowedRoles = accessControl[key];
   if (!allowedRoles) return true;
+
+  console.log("Allowed Roles:", allowedRoles);
+  console.log("User Role:", role);
   return allowedRoles.includes(role);
 }
 
@@ -35,9 +38,11 @@ export function authMiddleware(
 
   try {
     const token = authHeader?.split(" ")[1] ?? "";
-    const decoded = jwt.verify(token, process.env.JWT_SECRET ?? "your-secret");
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET ?? "your-secret"
+    ) as Express.UserPayload;
     (req as any).user = decoded;
-
     const key = getRouteKey(req);
     const userRole = (decoded as JwtPayload).role;
 
@@ -48,18 +53,16 @@ export function authMiddleware(
     }
 
     if (!isAuthorizedRole(key, userRole)) {
-      return {
-        status: 403,
+      return res.status(403).json({
         message:
           "Forbidden - You do not have permission to access this resource",
-      };
+      });
     }
 
     next();
   } catch (error) {
-    return {
-      status: 401,
+    return res.status(401).json({
       message: "Unauthorized - Invalid token",
-    };
+    });
   }
 }

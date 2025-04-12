@@ -31,7 +31,7 @@
 
 /**
  * @swagger
- * /api/supplier/listSupplier:
+ * /api/supplier/getListSupplier:
  *   get:
  *     summary: Get list of suppliers
  *     tags: [Supplier]
@@ -51,15 +51,9 @@
  *                   name:
  *                     type: string
  *                     example: 'ABC Supplies Ltd.'
- *                   email:
- *                     type: string
- *                     example: 'contact@abc-supplies.com'
- *                   phone:
- *                     type: string
- *                     example: '+84 123 456 789'
- *                   address:
- *                     type: string
- *                     example: '123 Nguyễn Văn Cừ, Quận 5, TP.HCM'
+ *                   creditLimit:
+ *                     type: number
+ *                     example: 100000
  *       500:
  *         description: Internal server error
  */

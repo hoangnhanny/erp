@@ -1,11 +1,34 @@
+import { asyncHandler } from "./../../middleware/asyncHandle.middleware";
 import { Router } from "express";
-// import { createPO, updatePOStatus } from "./purchaseOrder.controller";
-// import { authenticate } from "../../middlewares/authenticate";
-// import { requireRole } from "../../middlewares/requireRole";
+import PurchaseOrderController from "./puchaseOrder.contrroller";
+import { validateRequest } from "../../middleware/validate.middleware";
+import {
+  ApprovalPoRequest,
+  CreatePORequest,
+  SubmitPoRequest,
+} from "./puchaseOrder.dto";
 
-const router = Router();
+const poRouter = Router();
 
-// router.post("/", authenticate, requireRole("procurement"), createPO);
-// router.patch("/:id/status", authenticate, updatePOStatus);
+poRouter.post(
+  "/createPurchaseOrder",
+  validateRequest(CreatePORequest),
+  asyncHandler(PurchaseOrderController.createPurchaseOrder)
+);
+poRouter.put(
+  "/getListPurchaseOrder",
+  asyncHandler(PurchaseOrderController.getListPurchaseOrder)
+);
+poRouter.patch(
+  "/submitPurchaseOrder/:purchaseOrderId",
+  validateRequest(SubmitPoRequest),
+  asyncHandler(PurchaseOrderController.submitPurchaseOrder)
+);
 
-export default router;
+poRouter.patch(
+  "/approvePurchaseOrder/:purchaseOrderId",
+  validateRequest(ApprovalPoRequest),
+  asyncHandler(PurchaseOrderController.approvePurchaseOrder)
+);
+
+export default poRouter;

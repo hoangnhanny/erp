@@ -13,8 +13,8 @@ export class AuditLog {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: "uuid" })
-  user_id!: string;
+  @Column({ name: "user_id", type: "uuid" })
+  userId!: string;
 
   @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: "user_id" })
@@ -23,15 +23,15 @@ export class AuditLog {
   @Column({ type: "text" })
   action!: string;
 
-  @Column({ type: "text" })
-  entity_type!: string;
+  @Column({ name: "entity_type", type: "text" })
+  entityType!: string;
 
-  @Column({ type: "uuid" })
-  entity_id!: string;
+  @Column({ name: "entity_id", type: "uuid" })
+  entityId!: string;
 
   @Column({ type: "jsonb" })
   changes!: Record<string, any>;
 
   @CreateDateColumn({ name: "created_at" })
-  created_at!: Date;
+  createdAt!: Date;
 }

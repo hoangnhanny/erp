@@ -1,9 +1,34 @@
-interface CreateProductRequest {
-  name: string;
-  sku: string;
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from "class-validator";
+
+class CreateProductRequest {
+  @IsString()
+  @IsNotEmpty()
+  name!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  sku!: string;
+
+  @IsString()
+  @IsOptional()
   category?: string;
+
+  @IsOptional()
+  @IsNumber()
   unitPrice?: number;
+
+  @IsOptional()
+  @IsNumber()
   stock?: number;
+
+  @IsOptional()
+  @IsNumber()
   pendingStock?: number;
 }
 
@@ -17,12 +42,30 @@ interface CreateProductResponse {
   pendingStock?: number;
 }
 
-interface UpdateProductRequest {
-  id: string;
+class UpdateProductRequest {
+  @IsString()
+  @IsNotEmpty()
+  @IsUUID()
+  id!: string;
+
+  @IsString()
+  @IsOptional()
   name?: string;
+
+  @IsString()
+  @IsOptional()
   category?: string;
+
+  @IsOptional()
+  @IsNumber()
   unitPrice?: number;
+
+  @IsOptional()
+  @IsNumber()
   stock?: number;
+
+  @IsOptional()
+  @IsNumber()
   pendingStock?: number;
 }
 interface UpdateProductResponse {
@@ -35,7 +78,7 @@ interface UpdateProductResponse {
   pendingStock?: number;
 }
 
-export type {
+export {
   CreateProductRequest,
   CreateProductResponse,
   UpdateProductRequest,

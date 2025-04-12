@@ -39,3 +39,35 @@
  *       500:
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/user/getListUser:
+ *   get:
+ *     summary: Get list of users
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: List of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: 'u1234567'
+ *                   name:
+ *                     type: string
+ *                     example: 'John Doe'
+ *                   email:
+ *                     type: string
+ *                     example: 'john.doe@example.com'
+ *                   role:
+ *                     type: string
+ *                     example: 'manager'
+ *       500:
+ *         description: Internal server error
+ */

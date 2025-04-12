@@ -4,10 +4,11 @@ import { signToken } from "../../ultils/jwt";
 import { AppDataSource } from "../../config/data-source";
 import UserService from "../user/user.service";
 import { LoginResponse, RegisterResponse } from "./auth.dto";
+import { UserInput } from "../user/user.dto";
 
 const userRepository: Repository<User> = AppDataSource.getRepository(User);
 
-const register = async (userData: Partial<User>): Promise<RegisterResponse> => {
+const register = async (userData: UserInput): Promise<RegisterResponse> => {
   // Check if the user already exists
   const existingUser = await userRepository.findOneBy({
     email: userData.email,
@@ -15,7 +16,12 @@ const register = async (userData: Partial<User>): Promise<RegisterResponse> => {
   if (existingUser) {
     throw new Error("User already exists");
   }
-  const user = await UserService.createUser(userData);
+  const user = await UserService.createUser({
+    name: userData.name || "",
+    email: userData.email,
+    password: userData.password,
+    role: userData.role as "procurement" | "manager" | "inventory" | "finance",
+  });
   return user;
 };
 

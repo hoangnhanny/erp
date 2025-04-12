@@ -1,4 +1,4 @@
-import { ResponseData } from "../../model/response.type";
+import { ResponseData } from "../../type/response.type";
 import { LoginResponse, RegisterResponse } from "./auth.dto";
 import { AuthService } from "./auth.service";
 import { Request, Response } from "express";

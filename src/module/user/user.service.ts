@@ -3,24 +3,19 @@ import { User } from "../../entities/User";
 import bcrypt from "bcryptjs";
 import { AppDataSource } from "../../config/data-source";
 import { RegisterResponse } from "../auth/auth.dto";
+import { UserInput, UserResponse } from "./user.dto";
+import { BadRequestException } from "../../exception/Exception";
 
 const userRepository: Repository<User> = AppDataSource.getRepository(User);
 
-const createUser = async (
-  userData: Partial<User>
-): Promise<RegisterResponse> => {
+const createUser = async (userData: UserInput): Promise<RegisterResponse> => {
   // Check if the user already exists
   const { name, email, password, role } = userData;
-
-  if (!name || !email || !password || !role) {
-    throw new Error("Missing required fields");
-  }
-
   const existingUser = await userRepository.findOne({
     where: { email: userData.email },
   });
   if (existingUser) {
-    throw new Error("User already exists");
+    throw new BadRequestException("User already exists");
   }
 
   const hash = await bcrypt.hash(password, 10);
@@ -29,7 +24,7 @@ const createUser = async (
     name,
     email,
     password: hash,
-    role: role,
+    role: role as "procurement" | "manager" | "inventory" | "finance",
   });
   const result = await userRepository.save(user);
 
@@ -39,6 +34,23 @@ const createUser = async (
     email: result.email,
     role: result.role,
   };
+};
+
+const getListUser = async (): Promise<UserResponse[]> => {
+  const users = await userRepository.find();
+  return users.map((user) => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  }));
+};
+
+const getUserById = async (id: string): Promise<User | null> => {
+  const user = await userRepository.findOne({
+    where: { id: id },
+  });
+  return user;
 };
 
 const verifyPassword = async (
@@ -51,5 +63,7 @@ const verifyPassword = async (
 const UserService = {
   createUser,
   verifyPassword,
+  getListUser,
+  getUserById,
 };
 export default UserService;

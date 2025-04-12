@@ -6,9 +6,11 @@ import {
   CreateProductResponse,
   UpdateProductRequest,
   UpdateProductResponse,
-} from "./product.model";
-import { NotFoundException } from "../../exception/NotFoundException";
-import { BadRequestException } from "../../exception/BadRequestException";
+} from "./product.dto";
+import {
+  BadRequestException,
+  NotFoundException,
+} from "../../exception/Exception";
 
 const productRepository: Repository<Product> =
   AppDataSource.getRepository(Product);
@@ -16,15 +18,13 @@ const productRepository: Repository<Product> =
 const createProduct = async (
   data: CreateProductRequest
 ): Promise<CreateProductResponse> => {
-  const { name, sku } = data;
-  if (!name || !sku) {
-    throw new BadRequestException("Missing required fields");
-  }
+  const { sku } = data;
+
   const existingProduct = await productRepository.findOne({
     where: { sku: sku },
   });
   if (existingProduct) {
-    throw new NotFoundException("Product already exists");
+    throw new BadRequestException("Product already exists");
   }
   const product = productRepository.create(data);
   await productRepository.save(product);
@@ -44,9 +44,7 @@ const updateProduct = async (
   data: UpdateProductRequest
 ): Promise<UpdateProductResponse> => {
   const { id, name, category, unitPrice, stock, pendingStock } = data;
-  if (!id) {
-    throw new BadRequestException("Missing required fields");
-  }
+
   const existingProduct = await productRepository.findOne({
     where: { id: id },
   });
@@ -82,10 +80,18 @@ const getListProduct = async (): Promise<Product[]> => {
   return products;
 };
 
+const getProductById = async (id: string): Promise<Product | null> => {
+  const product = await productRepository.findOne({
+    where: { id: id },
+  });
+  return product;
+};
+
 const ProductService = {
   createProduct,
   updateProduct,
   getListProduct,
+  getProductById,
 };
 
 export default ProductService;
