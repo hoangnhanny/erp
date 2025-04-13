@@ -76,6 +76,8 @@ You must be register user => login => get token => Authorize in Swagger => Actio
 
 # Product
 
+=> All role can be access
+
 | Method | Endpoint                      | Description               |
 | ------ | ----------------------------- | ------------------------- |
 | POST   | `/api/product/createProduct`  | Create new product        |
@@ -84,12 +86,16 @@ You must be register user => login => get token => Authorize in Swagger => Actio
 
 # Supplier
 
+=> All role can be access
+
 | Method | Endpoint                       | Description                |
 | ------ | ------------------------------ | -------------------------- |
 | POST   | `/api/product/createSupplier`  | Create new supplier        |
 | GET    | `/api/product/getListSupplier` | Get all supplier in system |
 
 # User
+
+=> All role can be access
 
 | Method | Endpoint                | Description            |
 | ------ | ----------------------- | ---------------------- |
@@ -98,27 +104,28 @@ You must be register user => login => get token => Authorize in Swagger => Actio
 
 # Purchase Order
 
-| Method | Endpoint                                   | Description                                                                            |
-| ------ | ------------------------------------------ | -------------------------------------------------------------------------------------- |
-| POST   | `/api/purchase-order/createPurchaseOrder`  | Create new PO                                                                          |
-| GET    | `/api/purchase-order/getListPurchaseOrder` | Get all PO in system                                                                   |
-| PATCH  | `/api/purchase-order/submitPurchaseOrder`  | If you are owner you can submit PO after created with owner , Then you can approved PO |
-| PATCH  | `/api/purchase-order/approvePurchaseOrder` | Approve PO                                                                             |
+| Method     | Endpoint                                   | Description                                                                            | Role                     |
+| ---------- | ------------------------------------------ | -------------------------------------------------------------------------------------- | ------------------------ |
+| POST       | `/api/purchase-order/createPurchaseOrder`  | Create new PO                                                                          | "procurement", "manager" |
+| GET        | `/api/purchase-order/getListPurchaseOrder` | Get all PO in system                                                                   | => All role              |
+| PATCH      | `/api/purchase-order/submitPurchaseOrder`  | If you are owner you can submit PO after created with owner , Then you can approved PO | => Owner PO can submit   |
+| PATCH      | `/api/purchase-order/approvePurchaseOrder` | Approve PO                                                                             | "finance", "manager"     |
+| "finance", |
 
 We have Approve log after Approve PO
 
 # Inventory
 
-| Method | Endpoint                              | Description                             |
-| ------ | ------------------------------------- | --------------------------------------- |
-| POST   | `/api/inventory/receivePurchaseOrder` | API to sock in product form PO approved |
+| Method | Endpoint                              | Description                             | Role      |
+| ------ | ------------------------------------- | --------------------------------------- | --------- |
+| POST   | `/api/inventory/receivePurchaseOrder` | API to sock in product form PO approved | inventory |
 
 # Report
 
-| Method | Endpoint                         | Description                                                  |
-| ------ | -------------------------------- | ------------------------------------------------------------ |
-| GET    | `/api/report/inventory-turnover` | Get data turnoverRate in inventory                           |
-| GET    | `/api/report/supplier-spending`  | Total spent per supplier, average PO value, grouped by month |
+| Method | Endpoint                         | Description                                                  | Role                 |
+| ------ | -------------------------------- | ------------------------------------------------------------ | -------------------- |
+| GET    | `/api/report/inventory-turnover` | Get data turnoverRate in inventory                           | "finance", "manager" |
+| GET    | `/api/report/supplier-spending`  | Total spent per supplier, average PO value, grouped by month | "finance", "manager" |
 
 # Audit Log
 
