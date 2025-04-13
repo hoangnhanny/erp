@@ -8,7 +8,12 @@ const createSupplier = async (
   req: Request
 ): Promise<ResponseData<CreateSupplierResponse>> => {
   try {
-    const supplier = await SupplierService.createSupplier(req.body);
+    const { userId } = req.user as Express.UserPayload;
+
+    console.log("req.user", req.user);
+    const data = req.body;
+    data.userId = userId;
+    const supplier = await SupplierService.createSupplier(data);
     return {
       status: 201,
       message: "Supplier created successfully",

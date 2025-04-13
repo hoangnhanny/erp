@@ -2,7 +2,7 @@
  * @swagger
  * /api/inventory/receivePurchaseOrder:
  *   post:
- *     summary: Mark a purchase order as received and update inventory
+ *     summary: Receive a purchase order and update inventory
  *     tags: [Inventory]
  *     requestBody:
  *       required: true
@@ -12,20 +12,21 @@
  *             type: object
  *             required:
  *               - relatedPoId
- *               - performedBy
  *             properties:
  *               relatedPoId:
  *                 type: string
  *                 format: uuid
- *                 example: "po-uuid-123456"
- *               performedBy:
- *                 type: string
- *                 format: uuid
- *                 example: "user-uuid-789"
+ *                 example: "b75c87ec-2bb0-4a12-9b8a-3dd1c8f8a72f"
  *               note:
  *                 type: string
- *                 example: "Received all items in good condition"
+ *                 example: "Tất cả hàng hóa đã được nhận đầy đủ"
  *     responses:
  *       200:
- *         description: Purchase order received*
+ *         description: Purchase order received successfully
+ *       400:
+ *         description: Invalid request
+ *       404:
+ *         description: Purchase order not found
+ *       500:
+ *         description: Internal server error
  */

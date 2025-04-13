@@ -15,8 +15,6 @@ function isAuthorizedRole(key: string, role: string): boolean {
   const allowedRoles = accessControl[key];
   if (!allowedRoles) return true;
 
-  console.log("Allowed Roles:", allowedRoles);
-  console.log("User Role:", role);
   return allowedRoles.includes(role);
 }
 
@@ -44,6 +42,7 @@ export function authMiddleware(
     ) as Express.UserPayload;
     (req as any).user = decoded;
     const key = getRouteKey(req);
+
     const userRole = (decoded as JwtPayload).role;
 
     const allowedRoles = accessControl[key];
@@ -51,6 +50,7 @@ export function authMiddleware(
     if (!allowedRoles) {
       return next();
     }
+    console.log("isAuthorizedRole", isAuthorizedRole(key, userRole));
 
     if (!isAuthorizedRole(key, userRole)) {
       return res.status(403).json({
@@ -58,7 +58,6 @@ export function authMiddleware(
           "Forbidden - You do not have permission to access this resource",
       });
     }
-
     next();
   } catch (error) {
     return res.status(401).json({

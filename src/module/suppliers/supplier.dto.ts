@@ -1,9 +1,21 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 class CreateSupplierRequest {
   @IsString()
   @IsNotEmpty()
   name!: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  creditLimit?: number;
+
+  @IsString()
+  @IsEmail()
+  email?: string;
+}
+
+class CreateSupplierDto extends CreateSupplierRequest {
+  userId!: string;
 }
 
 interface CreateSupplierResponse {
@@ -13,4 +25,4 @@ interface CreateSupplierResponse {
   creditLimit: number;
 }
 
-export { CreateSupplierRequest, CreateSupplierResponse };
+export { CreateSupplierRequest, CreateSupplierResponse, CreateSupplierDto };

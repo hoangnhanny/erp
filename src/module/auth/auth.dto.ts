@@ -17,7 +17,7 @@ export enum RoleType {
   FINANCE = "finance",
 }
 
-class RegisterRequest {
+class RegisterDto {
   @IsString()
   @IsNotEmpty()
   name!: string;
@@ -45,4 +45,4 @@ interface LoginResponse {
   token: string;
 }
 
-export { RegisterResponse, LoginResponse, LoginRequest, RegisterRequest };
+export { RegisterResponse, LoginResponse, LoginRequest, RegisterDto };

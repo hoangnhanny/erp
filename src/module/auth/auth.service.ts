@@ -3,12 +3,11 @@ import { User } from "../../entities/User";
 import { signToken } from "../../ultils/jwt";
 import { AppDataSource } from "../../config/data-source";
 import UserService from "../user/user.service";
-import { LoginResponse, RegisterResponse } from "./auth.dto";
-import { UserInput } from "../user/user.dto";
+import { LoginResponse, RegisterDto, RegisterResponse } from "./auth.dto";
 
 const userRepository: Repository<User> = AppDataSource.getRepository(User);
 
-const register = async (userData: UserInput): Promise<RegisterResponse> => {
+const register = async (userData: RegisterDto): Promise<RegisterResponse> => {
   // Check if the user already exists
   const existingUser = await userRepository.findOneBy({
     email: userData.email,
@@ -42,7 +41,7 @@ const login = async (
     throw new Error("Invalid password"); // Invalid password
   }
 
-  const token = signToken({ userId: user.email, role: user.role });
+  const token = signToken({ userId: user.id, role: user.role });
 
   return { token }; // Return the authenticated user
 };

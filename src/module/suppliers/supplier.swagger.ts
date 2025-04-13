@@ -13,12 +13,12 @@
  *             required:
  *               - name
  *             properties:
- *               email:
- *                type: string
- *                example: "demo@gmail.com"
  *               name:
  *                 type: string
  *                 example: demo
+ *               email:
+ *                 type: string
+ *                 example: demo@gmail.com
  *               creditLimit:
  *                 type: number
  *                 example: 123

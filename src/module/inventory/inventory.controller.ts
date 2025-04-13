@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { ReceivedPurchaseOrderRequest } from "./inventory.dto";
+import { ReceivedPurchaseOrderDto } from "./inventory.dto";
 import InventoryService from "./inventory.service";
 
 const receivedPurchaseOrder = async (req: Request) => {
@@ -10,7 +10,7 @@ const receivedPurchaseOrder = async (req: Request) => {
     const { userId } = req.user as Express.UserPayload;
     const { note } = req.body;
 
-    const dataReceive: ReceivedPurchaseOrderRequest = {
+    const dataReceive: ReceivedPurchaseOrderDto = {
       relatedPoId: purchaseOrderId,
       performedBy: userId,
       note: note,

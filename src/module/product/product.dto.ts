@@ -32,6 +32,12 @@ class CreateProductRequest {
   pendingStock?: number;
 }
 
+class CreateProductDto extends CreateProductRequest {
+  // @IsString()
+  // @IsNotEmpty()
+  userId!: string;
+}
+
 interface CreateProductResponse {
   id: string;
   name: string;
@@ -68,6 +74,10 @@ class UpdateProductRequest {
   @IsNumber()
   pendingStock?: number;
 }
+
+class UpdateProductDto extends UpdateProductRequest {
+  userId!: string;
+}
 interface UpdateProductResponse {
   id: string;
   name: string;
@@ -83,4 +93,6 @@ export {
   CreateProductResponse,
   UpdateProductRequest,
   UpdateProductResponse,
+  CreateProductDto,
+  UpdateProductDto,
 };

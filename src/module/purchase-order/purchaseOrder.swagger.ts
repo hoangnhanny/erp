@@ -13,14 +13,10 @@
  *             required:
  *               - supplierId
  *               - items
- *               - userId
  *             properties:
  *               supplierId:
  *                 type: string
  *                 example: 'supplier-123'
- *               userId:
- *                 type: string
- *                 example: 'user-456'
  *               items:
  *                 type: array
  *                 items:
@@ -57,7 +53,7 @@
  *
  *     responses:
  *       200:
- *         description: List of purchase orders
+ *         description: List of purchase orders retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -67,9 +63,22 @@
  *                 properties:
  *                   id:
  *                     type: string
- *                     example: 'po-123456'
- *                   supplierId:
- *                     type*
+ *                     example: "po-uuid-123"
+ *                   supplierName:
+ *                     type: string
+ *                     example: "ABC Supplies Co."
+ *                   status:
+ *                     type: string
+ *                     example: "approved"
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                     example: "2025-04-10T10:30:00Z"
+ *                   totalAmount:
+ *                     type: number
+ *                     example: 150000.0
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -115,9 +124,6 @@
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - id
- *               - approverId
  *             properties:
  *               comment:
  *                 type: string

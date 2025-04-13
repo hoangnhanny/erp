@@ -10,13 +10,17 @@ class ReceivedPurchaseOrderRequest {
   @IsUUID()
   relatedPoId!: string;
 
-  @IsString()
-  @IsUUID()
-  performedBy!: string;
+  // @IsString()
+  // @IsUUID()
+  // performedBy!: string;
 
   @IsString()
   @IsOptional()
   note?: string;
 }
 
-export { ReceivedPurchaseOrderRequest };
+class ReceivedPurchaseOrderDto extends ReceivedPurchaseOrderRequest {
+  performedBy!: string;
+}
+
+export { ReceivedPurchaseOrderRequest, ReceivedPurchaseOrderDto };

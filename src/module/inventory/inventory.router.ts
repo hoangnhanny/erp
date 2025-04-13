@@ -7,7 +7,7 @@ import { asyncHandler } from "../../middleware/asyncHandle.middleware";
 const inventoryRouter = express.Router();
 
 inventoryRouter.post(
-  "/receivedPurchaseOrder",
+  "/receivePurchaseOrder",
   validateRequest(ReceivedPurchaseOrderRequest),
   asyncHandler(InventoryController.receivedPurchaseOrder)
 );

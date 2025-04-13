@@ -21,7 +21,7 @@ export class ApprovalLog {
   @JoinColumn({ name: "purchase_order_id" })
   purchaseOrder!: PurchaseOrder;
 
-  @Column({ type: "uuid" })
+  @Column({ name: "approved_by", type: "uuid" })
   approvedBy!: string;
 
   @ManyToOne(() => User, { nullable: false })

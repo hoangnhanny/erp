@@ -4,9 +4,10 @@ import {
   BadRequestException,
   NotFoundException,
 } from "../../exception/Exception";
-import { ReceivedPurchaseOrderRequest, StockType } from "./inventory.dto";
+import AuditLogService from "../audit-logs/auditLogs.service";
+import { ReceivedPurchaseOrderDto, StockType } from "./inventory.dto";
 
-const receivedPurchaseOrder = async (data: ReceivedPurchaseOrderRequest) => {
+const receivedPurchaseOrder = async (data: ReceivedPurchaseOrderDto) => {
   const type = StockType.IN;
   const { relatedPoId, performedBy, note } = data;
 
@@ -28,7 +29,10 @@ const receivedPurchaseOrder = async (data: ReceivedPurchaseOrderRequest) => {
       const product = item.product;
       const quantity = item.quantity;
 
+      //Update stock product after received
       product.stock += quantity;
+
+      // Decrease pending stock
       product.pendingStock = Math.max(0, product.pendingStock - quantity);
 
       await manager.save(Product, product);
@@ -40,10 +44,21 @@ const receivedPurchaseOrder = async (data: ReceivedPurchaseOrderRequest) => {
       inventoryData.performedById = performedBy;
       inventoryData.type = type;
       inventoryData.note = note ?? null;
+
       await manager.save(inventoryData);
 
+      // Add audit logs
+      const auditLogData: AuditLogsRequest = {
+        action: "received",
+        entityType: "InventoryTransaction",
+        entityId: inventoryData.id,
+        userId: performedBy,
+        changes: inventoryData,
+      };
+      await AuditLogService.createAudit(auditLogData);
+
       console.log(
-        `[Thông báo] Đã nhận ${quantity} sản phẩm "${product.name}" từ PO ${po.id}`
+        `[Notification] received ${quantity} product "${product.name}" from PO ${po.id}`
       );
     }
   });

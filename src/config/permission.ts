@@ -6,6 +6,7 @@ export const accessControl: Record<string, string[]> = {
     "manager",
     "finance",
   ],
-  "POST /inventory/receivePurchaseOrder": ["inventory"],
-  "GET /purchase-orders/view-finance": ["finance", "manager"],
+  "POST /api/inventory/receivePurchaseOrder": ["inventory"],
+  "GET /api/report/supplier-spending": ["finance", "manager"],
+  "GET /api/report/inventory-turnover": ["finance", "manager"],
 };

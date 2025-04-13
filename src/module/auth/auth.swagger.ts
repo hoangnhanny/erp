@@ -14,10 +14,10 @@
  *              properties:
  *                email:
  *                  type: string
- *                  example: "admin"
+ *                  example: "manager@gmail.com"
  *                password:
  *                  type: string
- *                  example: "admin"
+ *                  example: "manager"
  *      responses:
  *        200:
  *          description: Successful login, returns user object with token

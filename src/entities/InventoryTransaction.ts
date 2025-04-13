@@ -36,7 +36,7 @@ export class InventoryTransaction {
 
   @ManyToOne(() => PurchaseOrder, { nullable: true, onDelete: "SET NULL" })
   @JoinColumn({ name: "related_po_id" })
-  relatedPurchaseOrder!: PurchaseOrder | null;
+  relatedPurchaseOrder!: PurchaseOrder;
 
   @Column({ name: "performed_by", type: "uuid" })
   performedById!: string;

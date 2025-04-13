@@ -15,13 +15,12 @@ poRouter.post(
   validateRequest(CreatePORequest),
   asyncHandler(PurchaseOrderController.createPurchaseOrder)
 );
-poRouter.put(
+poRouter.get(
   "/getListPurchaseOrder",
   asyncHandler(PurchaseOrderController.getListPurchaseOrder)
 );
 poRouter.patch(
   "/submitPurchaseOrder/:purchaseOrderId",
-  validateRequest(SubmitPoRequest),
   asyncHandler(PurchaseOrderController.submitPurchaseOrder)
 );
 

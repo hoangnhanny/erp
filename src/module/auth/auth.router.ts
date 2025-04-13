@@ -2,7 +2,7 @@ import express from "express";
 import { asyncHandler } from "../../middleware/asyncHandle.middleware";
 import AuthController from "./auth.controller";
 import { validateRequest } from "../../middleware/validate.middleware";
-import { LoginRequest, RegisterRequest } from "./auth.dto";
+import { LoginRequest, RegisterDto } from "./auth.dto";
 
 const authRouter = express.Router();
 
@@ -13,7 +13,7 @@ authRouter.post(
 );
 authRouter.post(
   "/registerUser",
-  validateRequest(RegisterRequest),
+  validateRequest(RegisterDto),
   asyncHandler(AuthController.registerUser)
 );
 

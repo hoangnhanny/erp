@@ -11,14 +11,13 @@ import {
 class CreatePurchaseOrderItem {
   @IsString()
   @IsNotEmpty()
+  @IsUUID()
   productId!: string;
 
-  @IsString()
   @IsNotEmpty()
   @IsNumber()
   quantity!: number;
 
-  @IsString()
   @IsNotEmpty()
   @IsNumber()
   unitPrice!: number;
@@ -31,12 +30,16 @@ class CreatePORequest {
   supplierId!: string;
 
   @IsArray()
-  @ValidateNested()
+  // @ValidateNested()
   items!: CreatePurchaseOrderItem[];
 
-  @IsString()
-  @IsNotEmpty()
-  @IsUUID()
+  // @IsString()
+  // @IsNotEmpty()
+  // @IsUUID()
+  // userId!: string;
+}
+
+class CreatePODto extends CreatePORequest {
   userId!: string;
 }
 
@@ -46,18 +49,13 @@ interface CreatePOResponse {
 
 class ApprovalPoRequest {
   @IsString()
-  @IsNotEmpty()
-  @IsUUID()
-  id!: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsUUID()
-  approverId!: string;
-
-  @IsString()
   @IsOptional()
   comment?: string;
+}
+
+class ApprovalPoDto extends ApprovalPoRequest {
+  id!: string;
+  approverId!: string;
 }
 
 class SubmitPoRequest {
@@ -65,6 +63,10 @@ class SubmitPoRequest {
   @IsNotEmpty()
   @IsUUID()
   id!: string;
+
+  @IsString()
+  @IsOptional()
+  comment?: string;
 }
 
 export {
@@ -73,4 +75,6 @@ export {
   ApprovalPoRequest,
   CreatePurchaseOrderItem,
   SubmitPoRequest,
+  CreatePODto,
+  ApprovalPoDto,
 };

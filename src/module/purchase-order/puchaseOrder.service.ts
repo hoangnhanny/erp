@@ -3,9 +3,9 @@ import { AppDataSource } from "../../config/data-source";
 import SupplierService from "../suppliers/supplier.service";
 import UserService from "../user/user.service";
 import {
+  ApprovalPoDto,
   ApprovalPoRequest,
-  CreatePORequest,
-  SubmitPoRequest,
+  CreatePODto,
 } from "./puchaseOrder.dto";
 import {
   ApprovalLog,
@@ -14,11 +14,12 @@ import {
   PurchaseOrderItem,
 } from "../../entities";
 import { NotFoundException } from "../../exception/Exception";
+import AuditLogService from "../audit-logs/auditLogs.service";
 
 const purchaseOrder: Repository<PurchaseOrder> =
   AppDataSource.getRepository(PurchaseOrder);
 
-const createPO = async (data: CreatePORequest) => {
+const createPO = async (data: CreatePODto) => {
   const { supplierId, items, userId } = data;
 
   const existSupplier = await SupplierService.findSupplierById(supplierId);
@@ -34,40 +35,46 @@ const createPO = async (data: CreatePORequest) => {
   return await AppDataSource.transaction(async (manager) => {
     let totalAmount = 0;
     const poItems: PurchaseOrderItem[] = [];
-
-    for (const item of items) {
-      const product = await manager.findOneOrFail(Product, {
-        where: { id: item.productId },
-      });
-
-      // Tăng pending_stock
-      product.pendingStock += item.quantity;
-
-      // Cập nhật giá nếu khác
-      if (product.unitPrice !== item.unitPrice) {
-        product.unitPrice = item.unitPrice;
-      }
-
-      await manager.save(product);
-
-      totalAmount += item.unitPrice * item.quantity;
-
-      const poItem = manager.create(PurchaseOrderItem, {
-        product,
-        quantity: item.quantity,
-        unit_price: item.unitPrice,
-      });
-
-      poItems.push(poItem);
-    }
-
     const po = manager.create(PurchaseOrder, {
       supplier: { id: supplierId },
       createdById: userId,
       status: "draft",
       totalAmount: totalAmount,
     });
-    return await manager.save(po);
+
+    await manager.save(po);
+
+    for (const item of items) {
+      const product = await manager.findOneOrFail(Product, {
+        where: { id: item.productId },
+      });
+
+      totalAmount += item.unitPrice * item.quantity;
+
+      const poItem = manager.create(PurchaseOrderItem, {
+        product,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        purchaseOrderId: po.id,
+      });
+
+      manager.save(poItem);
+      poItems.push(poItem);
+    }
+
+    po.totalAmount = totalAmount;
+    await manager.save(po);
+
+    // Audit log
+    const auditLogData = {
+      action: "create",
+      entityType: "PurchaseOrder",
+      entityId: userId,
+      userId: userId,
+      changes: po,
+    };
+    await AuditLogService.createAudit(auditLogData);
+    return po;
   });
 };
 
@@ -91,11 +98,22 @@ const submitPurchaseOrder = async (data: {
     throw new NotFoundException("Purchase order not found");
   }
 
-  po.status = "pending_review";
-  return await purchaseOrder.save(po);
+  return await AppDataSource.transaction(async (manager) => {
+    po.status = "pending_review";
+    await manager.save(po);
+    // Audit log
+    const auditLogData = {
+      action: "submit",
+      entityType: "PurchaseOrder",
+      entityId: po.id,
+      userId: data.submitById,
+      changes: po,
+    };
+    await AuditLogService.createAudit(auditLogData);
+  });
 };
 
-const approvePurchaseOrder = async (data: ApprovalPoRequest) => {
+const approvePurchaseOrder = async (data: ApprovalPoDto) => {
   const { id, approverId, comment } = data;
   const po = await purchaseOrder.findOne({
     where: { id: id },
@@ -114,6 +132,18 @@ const approvePurchaseOrder = async (data: ApprovalPoRequest) => {
   return await AppDataSource.transaction(async (manager) => {
     po.status = "approved";
     await manager.save(po);
+
+    // Audit log
+    const auditLogData = {
+      action: "approve",
+      entityType: "PurchaseOrder",
+      entityId: po.id,
+      userId: approverId,
+      changes: po,
+    };
+    await AuditLogService.createAudit(auditLogData);
+
+    // Create approval log
     const approvalLog = manager.create(ApprovalLog, {
       approvedById: { id: approverId },
       purchaseOrder: { id: id },
@@ -130,7 +160,6 @@ const approvePurchaseOrder = async (data: ApprovalPoRequest) => {
       const product = await manager.findOneOrFail(Product, {
         where: { id: item.productId },
       });
-      // product.stock += item.quantity;
       product.pendingStock -= item.quantity;
       await manager.save(product);
     }

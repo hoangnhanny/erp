@@ -8,7 +8,10 @@ const createProduct = async (
   req: Request
 ): Promise<ResponseData<CreateProductResponse>> => {
   try {
-    const product = await ProductService.createProduct(req.body);
+    const product = await ProductService.createProduct({
+      ...req.body,
+      userId: req.user?.userId,
+    });
     return {
       status: 201,
       message: "Product created successfully",
@@ -27,7 +30,10 @@ const updateProduct = async (
   req: Request
 ): Promise<ResponseData<UpdateProductResponse>> => {
   try {
-    const product = await ProductService.updateProduct(req.body);
+    const product = await ProductService.updateProduct({
+      ...req.body,
+      userId: req.user?.userId,
+    });
     return {
       status: 200,
       message: "Product updated successfully",

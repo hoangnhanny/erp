@@ -3,7 +3,10 @@ import { PurchaseOrderService } from "./puchaseOrder.service";
 import { Request } from "express";
 const createPurchaseOrder = async (req: Request) => {
   try {
-    const purchaseOrder = await PurchaseOrderService.createPO(req.body);
+    const purchaseOrder = await PurchaseOrderService.createPO({
+      ...req.body,
+      userId: req.user?.userId,
+    });
     return {
       status: 201,
       message: "Purchase Order created successfully",
@@ -20,6 +23,8 @@ const createPurchaseOrder = async (req: Request) => {
 const getListPurchaseOrder = async (req: Request) => {
   try {
     const purchaseOrders = await PurchaseOrderService.getListPurchaseOrder();
+
+    console.log("purchaseOrders", purchaseOrders);
     return {
       status: 200,
       message: "Purchase Orders retrieved successfully",
