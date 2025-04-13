@@ -30,13 +30,7 @@ class CreatePORequest {
   supplierId!: string;
 
   @IsArray()
-  // @ValidateNested()
   items!: CreatePurchaseOrderItem[];
-
-  // @IsString()
-  // @IsNotEmpty()
-  // @IsUUID()
-  // userId!: string;
 }
 
 class CreatePODto extends CreatePORequest {

@@ -19,7 +19,7 @@
  *                 example: "b75c87ec-2bb0-4a12-9b8a-3dd1c8f8a72f"
  *               note:
  *                 type: string
- *                 example: "Tất cả hàng hóa đã được nhận đầy đủ"
+ *                 example: "Products received in good condition"
  *     responses:
  *       200:
  *         description: Purchase order received successfully

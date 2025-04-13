@@ -1,14 +1,17 @@
 import { DataSource } from "typeorm";
 import "dotenv/config";
-import { User } from "../entities/User";
-import { Supplier } from "../entities/Suppliers";
-import { Product } from "../entities/Product";
-import { PurchaseOrder } from "../entities/PuchaseOrders";
-import { PurchaseOrderItem } from "../entities/PurchaseOrderItems";
-import { InventoryTransaction } from "../entities/InventoryTransaction";
-import { ApprovalLog } from "../entities/ApprovalLos";
-import { AuditLog } from "../entities/AuditLogs";
+
 import "reflect-metadata";
+import {
+  ApprovalLog,
+  InventoryTransaction,
+  Product,
+  PurchaseOrder,
+  PurchaseOrderItem,
+  Supplier,
+  User,
+} from "../entities";
+import { AuditLog } from "../entities/AuditLogs";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -18,7 +21,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASS || "postgres",
   database: process.env.DB_NAME || "mydb",
   synchronize: true,
-  logging: true,
+  logging: false,
   entities: [
     User,
     Supplier,

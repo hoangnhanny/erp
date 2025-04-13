@@ -9,16 +9,16 @@ const searchAuditLogs = async (req: Request, res: Response) => {
       action: req.query?.action ?? null,
       entityType: req.query?.entityType ?? null,
     });
-    return res.status(200).json({
+    return {
       status: 200,
       message: "Audit logs retrieved successfully",
       data: auditLogs,
-    });
+    };
   } catch (error) {
-    return res.status(500).json({
+    return {
       status: 500,
       message: error instanceof Error ? error.message : "Internal Server Error",
-    });
+    };
   }
 };
 

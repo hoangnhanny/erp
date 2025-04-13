@@ -16,7 +16,6 @@ const createAudit = async (data: AuditLogsRequest) => {
 
 const searchAuditLogs = async (dataSearch: any): Promise<AuditLog[]> => {
   const { userId, action, entityType } = dataSearch;
-  console.log("dataSearch", dataSearch);
   const query = AppDataSource.createQueryBuilder(AuditLog, "auditLog");
 
   if (userId) {

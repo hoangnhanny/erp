@@ -48,10 +48,6 @@
  *                   entityId:
  *                     type: string
  *                     example: "product-789"
- *                   timestamp:
- *                     type: string
- *                     format: date-time
- *                     example: "2025-04-10T14:30:00Z"
  *                   details:
  *                     type: object
  *                     description: Additional details of the action

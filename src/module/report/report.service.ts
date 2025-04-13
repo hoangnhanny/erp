@@ -1,3 +1,5 @@
+import path from "path";
+import fs from "fs/promises";
 import { AppDataSource } from "../../config/data-source";
 import {
   InventoryTransaction,
@@ -5,41 +7,37 @@ import {
   PurchaseOrder,
   Supplier,
 } from "../../entities";
-import { InventoryTurnoverResponse } from "./report.dto";
 
-const getInventoryTurnover = async (startDate: string, endDate: string) => {
-  const result = await AppDataSource.createQueryBuilder(
+const getInventoryTurnover = async (startDate?: string, endDate?: string) => {
+  const query = AppDataSource.createQueryBuilder(
     InventoryTransaction,
-    "i"
+    "inventory"
   )
     .select("p.id", "productId")
     .addSelect(
-      `SUM(CASE WHEN i.type = 'stock_in' THEN i.quantity ELSE 0 END)`,
+      `SUM(CASE WHEN inventory.type = 'stock_in' THEN inventory.quantity ELSE 0 END)`,
       "totalIn"
     )
     .addSelect(
-      `SUM(CASE WHEN i.type = 'stock_out' THEN i.quantity ELSE 0 END)`,
+      `SUM(CASE WHEN inventory.type = 'stock_out' THEN inventory.quantity ELSE 0 END)`,
       "totalOut"
     )
-    .leftJoin(Product, "p", "i.productId = p.id")
-    .where("i.createdAt BETWEEN :startDate AND :endDate", {
+    .leftJoin(Product, "p", "inventory.productId = p.id");
+
+  if (startDate && endDate) {
+    query.where("inventory.createdAt BETWEEN :startDate AND :endDate", {
       startDate,
       endDate,
-    })
-    .groupBy("p.id")
-    .getRawMany();
-
-  if (result.length === 0) {
-    return [];
+    });
+  } else if (startDate) {
+    query.where("inventory.createdAt >= :startDate", { startDate });
+  } else if (endDate) {
+    query.where("inventory.createdAt <= :endDate", { endDate });
   }
-  const data: InventoryTurnoverResponse[] = result.map((item: any) => ({
-    productId: item.productId,
-    totalIn: parseInt(item.totalIn) || 0,
-    totalOut: parseInt(item.totalOut) || 0,
-    turnOverRate: parseInt(item.totalOut) / parseInt(item.totalIn),
-  }));
 
-  return data;
+  query.groupBy("p.id");
+
+  return await query.getRawMany();
 };
 
 const getSupplierSpending = async () => {
@@ -60,9 +58,26 @@ const getSupplierSpending = async () => {
   return report;
 };
 
+const generateReport = async () => {
+  console.log("Generating report...!");
+  try {
+    const inventoryTurnover = await getInventoryTurnover();
+    const supplierSpending = await getSupplierSpending();
+    const filePath = path.join(__dirname, "../../reports-gen-json", "auto-report.json");
+    await fs.writeFile(filePath, JSON.stringify({inventoryTurnover, supplierSpending }));
+    return {
+      inventoryTurnover,
+      supplierSpending,
+    };
+  } catch (error) {
+    console.error("Error generating report:", error);
+  }
+};
+
 const ReportService = {
   getInventoryTurnover,
   getSupplierSpending,
+  generateReport,
 };
 
 export default ReportService;

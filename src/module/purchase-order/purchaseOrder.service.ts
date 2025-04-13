@@ -6,7 +6,7 @@ import {
   ApprovalPoDto,
   ApprovalPoRequest,
   CreatePODto,
-} from "./puchaseOrder.dto";
+} from "./purchaseOrder.dto";
 import {
   ApprovalLog,
   Product,

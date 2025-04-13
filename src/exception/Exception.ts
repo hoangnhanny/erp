@@ -7,7 +7,7 @@ export class BadRequestException extends Error {
 }
 
 export class NotFoundException extends Error {
-  statusCode = 400;
+  statusCode = 404;
   constructor(message: string) {
     super(message);
     this.name = "NotFoundException";

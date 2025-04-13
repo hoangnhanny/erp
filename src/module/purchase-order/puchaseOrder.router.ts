@@ -1,12 +1,8 @@
 import { asyncHandler } from "./../../middleware/asyncHandle.middleware";
 import { Router } from "express";
-import PurchaseOrderController from "./puchaseOrder.contrroller";
+import PurchaseOrderController from "./purchaseOrder.controller";
 import { validateRequest } from "../../middleware/validate.middleware";
-import {
-  ApprovalPoRequest,
-  CreatePORequest,
-  SubmitPoRequest,
-} from "./puchaseOrder.dto";
+import { ApprovalPoRequest, CreatePORequest } from "./purchaseOrder.dto";
 
 const poRouter = Router();
 

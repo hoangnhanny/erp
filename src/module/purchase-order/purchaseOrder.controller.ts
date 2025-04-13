@@ -1,5 +1,5 @@
 import { ResponseData } from "../../type/response.type";
-import { PurchaseOrderService } from "./puchaseOrder.service";
+import { PurchaseOrderService } from "./purchaseOrder.service";
 import { Request } from "express";
 const createPurchaseOrder = async (req: Request) => {
   try {
